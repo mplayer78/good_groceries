@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useProductState } from "../State/ProductContext";
 import Hero from "./Hero";
 import ProductCardContainer from "./ProductCardContainer";
-import ShoppingList from "./ShoppingList";
 
 export default function FrontPage() {
   const { hydrateProducts, hydrateOffers } = useProductState();
@@ -37,7 +36,6 @@ export default function FrontPage() {
     <>
       <Hero />
       <ProductCardContainer />
-      <ShoppingList />
     </>
   );
 }

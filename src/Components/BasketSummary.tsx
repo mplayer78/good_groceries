@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { useProductState } from "../State/ProductContext";
 import formatMoney from "../util/formatMoney";
+import sumItems from "../util/sumItems";
 
 export default function BasketSummary() {
   const { allBasket } = useProductState();
-  const basketTotal = allBasket.reduce((acc, val) => acc + val.unitPrice, 0);
+  const basketTotal = sumItems(allBasket);
   const basketQuantity = allBasket.length;
   return (
     <StyledBasketSummary>

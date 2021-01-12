@@ -3,14 +3,16 @@ import BasketSummary from "./BasketSummary";
 import Logo from "./Logo";
 import SiteNavigation from "./SiteNavigation";
 import styled from "styled-components";
+import ShoppingList from "./ShoppingList";
 
 export default function HeaderBar() {
   return (
     <Fragment>
-      <StyledBackground />
+      <StyledBackground></StyledBackground>
       <StyledHeaderBar>
         <Logo />
         <BasketSummary />
+        <ShoppingList />
       </StyledHeaderBar>
       <SiteNavigation />
     </Fragment>
@@ -23,6 +25,7 @@ const StyledHeaderBar = styled.nav`
   justify-content: space-between;
   grid-row: 1;
   align-items: center;
+  position: relative;
 `;
 
 // bump specificity of header to override page grid

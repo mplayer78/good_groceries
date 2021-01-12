@@ -2,8 +2,11 @@
 
 :root {
   --med-padding: 20px;
+  --large-padding: 36px;
   --header-height: 95px;
   --brand-primary-400: #ffdc16;
   --brand-black: #46413f;
+  --light-grey: #6b6461;
   --brand-font: "Comfortaa";
+  --opaque-white: rgba(255, 255, 255, 0.9);
 }

@@ -15,7 +15,6 @@ type ProductStateType = {
 };
 
 // basket items will be stored as individual items then collated in basket calcs
-
 export type Product = {
   productID: number;
   productName: string;
@@ -23,17 +22,24 @@ export type Product = {
   productImgUrl: string;
 };
 
-class BasketItem {
+export interface Sellable {
+  unitPrice: number;
+  quantity: number;
+}
+
+export class BasketItem implements Sellable {
   public productID: number;
   productName: string;
   basketProductID: string;
   unitPrice: number;
+  quantity: number;
   constructor(product: Product) {
     const { productID, productName, productUnitPrice } = product;
     this.productID = productID;
     this.productName = productName;
     this.basketProductID = uuidv4();
     this.unitPrice = productUnitPrice;
+    this.quantity = 1;
   }
 }
 
@@ -137,5 +143,6 @@ export function useProductState() {
     hydrateOffers,
     allProducts: state.products,
     allBasket: state.basket,
+    allOffers: state.offers,
   };
 }
