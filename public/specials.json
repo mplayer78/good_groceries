@@ -1,0 +1,23 @@
+[
+  {
+    "specialID":1,
+    "specialTitle":"Get 1/2 price bread",
+    "conditionalProducts":[4,1],
+    "addedProducts":[],
+    "discountApplied": 55
+  },
+  {
+    "specialID":2,
+    "specialTitle":"Buy one get one free",
+    "conditionalProducts":[3],
+    "addedProducts":[3],
+    "discountApplied": 90
+  },
+  {
+    "specialID":3,
+    "specialTitle":"1/3 Off",
+    "conditionalProducts":[5],
+    "addedProducts":[],
+    "discountApplied": 40
+  }
+]

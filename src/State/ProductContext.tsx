@@ -1,25 +1,55 @@
-import React, { useReducer } from "react";
+import React, { useCallback, useReducer } from "react";
 import { useContext } from "react";
+import { uuidv4 } from "../util/uuidv4";
 
 const defaultState: ProductStateType = {
   basket: [],
+  products: [],
+  offers: [],
 };
 
 type ProductStateType = {
   basket: Array<BasketItem>;
+  products: Array<Product>;
+  offers: Array<Offer>;
 };
 
 // basket items will be stored as individual items then collated in basket calcs
-type BasketItem = {
+
+export type Product = {
   productID: number;
   productName: string;
-  basketProductId: number;
+  productUnitPrice: number;
+  productImgUrl: string;
+};
+
+class BasketItem {
+  public productID: number;
+  productName: string;
+  basketProductID: string;
   unitPrice: number;
+  constructor(product: Product) {
+    const { productID, productName, productUnitPrice } = product;
+    this.productID = productID;
+    this.productName = productName;
+    this.basketProductID = uuidv4();
+    this.unitPrice = productUnitPrice;
+  }
+}
+
+export type Offer = {
+  specialID: number;
+  specialTitle: string;
+  conditionalProducts: Array<number>;
+  addedProducts: Array<number>;
+  discountApplied: number;
 };
 
 type ActionTypes =
-  | { type: "ADD_PRODUCT"; productID: number }
-  | { type: "REMOVE_PRODUCT"; basketProductID: number };
+  | { type: "ADD_PRODUCT_TO_BASKET"; productID: number }
+  | { type: "REMOVE_PRODUCT_FROM_BASKET"; basketProductID: number }
+  | { type: "HYDRATE_ALL_PRODUCTS"; products: Array<Product> }
+  | { type: "HYDRATE_ALL_OFFERS"; offers: Array<Offer> };
 
 interface ContextProps {
   state: ProductStateType;
@@ -34,15 +64,39 @@ const ProductContext = React.createContext<ContextProps>({
 
 function UIReducer(state: ProductStateType, action: ActionTypes) {
   switch (action.type) {
-    case "ADD_PRODUCT":
+    case "ADD_PRODUCT_TO_BASKET":
+      try {
+        // assumes unique ID number
+        const found = state.products.find(
+          (v) => v.productID === action.productID
+        );
+        if (!found) {
+          throw new Error("Product not found");
+        }
+        const newBasketProduct = new BasketItem(found);
+        return {
+          ...state,
+          basket: [...state.basket, newBasketProduct],
+        };
+      } catch (error) {
+        // TODO Handle error properly.
+        console.error(error);
+      }
+      return state;
+    case "REMOVE_PRODUCT_FROM_BASKET":
       return {
         ...state,
         // TODO handle product update
       };
-    case "REMOVE_PRODUCT":
+    case "HYDRATE_ALL_PRODUCTS":
       return {
         ...state,
-        // TODO handle product update
+        products: action.products,
+      };
+    case "HYDRATE_ALL_OFFERS":
+      return {
+        ...state,
+        offers: action.offers,
       };
     default:
       return state;
@@ -59,16 +113,29 @@ function ProductStateProvider({ children }: { children: React.ReactNode }) {
 }
 export { ProductStateProvider };
 
-export function useUIState() {
+export function useProductState() {
   /**
    * Returns an object with the individual actions in 1st position, state & dispatch in the 2nd & third
    */
-  const ctx = useContext(ProductContext);
+  const { state, dispatch } = useContext(ProductContext);
+  // wrapped in a callback to prevent continuous rerender if included as a dependency
+  const hydrateProducts = useCallback(
+    (products: Array<Product>) =>
+      dispatch({ type: "HYDRATE_ALL_PRODUCTS", products }),
+    [dispatch]
+  );
+  const hydrateOffers = useCallback(
+    (offers: Array<Offer>) => dispatch({ type: "HYDRATE_ALL_OFFERS", offers }),
+    [dispatch]
+  );
   return {
     addProduct: (productID: number) =>
-      ctx.dispatch({ type: "ADD_PRODUCT", productID }),
+      dispatch({ type: "ADD_PRODUCT_TO_BASKET", productID }),
     removeProduct: (basketProductID: number) =>
-      ctx.dispatch({ type: "REMOVE_PRODUCT", basketProductID }),
-    ...ctx,
+      dispatch({ type: "REMOVE_PRODUCT_FROM_BASKET", basketProductID }),
+    hydrateProducts,
+    hydrateOffers,
+    allProducts: state.products,
+    allBasket: state.basket,
   };
 }

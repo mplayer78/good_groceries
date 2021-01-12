@@ -1,0 +1,32 @@
+[
+  {
+    "productID":1,
+    "productName":"bread",
+    "productUnitPrice":110,
+    "productImgUrl":"/images/bread.jpg"
+  },
+  {
+    "productID":2,
+    "productName":"milk",
+    "productUnitPrice":50,
+    "productImgUrl":"/images/milk.jpg"
+  },
+  {
+    "productID":3,
+    "productName":"cheese",
+    "productUnitPrice":90,
+    "productImgUrl":"/images/cheese.jpg"
+  },
+  {
+    "productID":4,
+    "productName":"soup",
+    "productUnitPrice":60,
+    "productImgUrl":"/images/soup.jpg"
+  },
+  {
+    "productID":5,
+    "productName":"butter",
+    "productUnitPrice":120,
+    "productImgUrl":"/images/butter.jpg"
+  }
+]

@@ -1,20 +1,16 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { UIStateProvider } from "./State/UIContext";
-import { ProductStateProvider } from "./State/ProductContext";
 import Layout from "./Components/Layout";
 import FrontPage from "./Components/FrontPage";
+import { Providers } from "./Providers";
 
 function App() {
   return (
     <div className="App">
-      <UIStateProvider>
-        <ProductStateProvider>
-          <Layout>
-            <FrontPage />
-          </Layout>
-        </ProductStateProvider>
-      </UIStateProvider>
+      <Providers>
+        <Layout>
+          <FrontPage />
+        </Layout>
+      </Providers>
     </div>
   );
 }
