@@ -99,7 +99,13 @@ export default function ShoppingList() {
         </span>
       </StyledLineItem>
       <br />
-      <CheckoutButton>
+      <CheckoutButton
+        onClick={() =>
+          alert(
+            "Sorry, it looks like we are not currently delivering to your area."
+          )
+        }
+      >
         Checkout
         <img
           src="images/right-arrow.svg"

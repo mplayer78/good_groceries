@@ -78,6 +78,8 @@ const StyledProductCardFooter = styled(StyledProductCardBanner)`
 const StyledImage = styled.img`
   object-fit: cover;
   object-position: 100% 10%;
+  width: 100%;
+  height: 100%;
 `;
 
 const StyledImageContainer = styled.div`
