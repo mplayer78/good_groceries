@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import styled from "styled-components";
 import { BasketItem, Offer, useProductState } from "../State/ProductContext";
 import { useUIState } from "../State/UIContext";
 import applyOffers from "../util/applyOffers";
 import formatMoney from "../util/formatMoney";
 import sumItems from "../util/sumItems";
+import { uuidv4 } from "../util/uuidv4";
 import { ShoppingListLineItem } from "./ShoppingListLineItem";
 import { StyledLineItem } from "./StyledComponents/StyledLineItem";
 
@@ -12,8 +13,9 @@ export default function ShoppingList() {
   const { allBasket, allOffers, allProducts } = useProductState();
   const { setMenuHidden, menuExposed } = useUIState();
   // TODO, type dispatch
-  const [validOffers, setValidOffers]: [Array<Offer>, any] = useState([]);
-  // console.log("validOffers", validOffers);
+  const [validOffers, setValidOffers]: [Array<Offer>, Dispatch<any>] = useState(
+    []
+  );
   useEffect(() => {
     if (allOffers.length > 0 && allBasket.length > 0) {
       const validOffers = applyOffers([...allBasket], [...allOffers]);
@@ -33,10 +35,10 @@ export default function ShoppingList() {
     return allProducts.find((v) => v.productID === id);
   };
   const specialsProducts = validOffers.map((val) => {
-    // return : conditional product, target product, additional item, discount
     const conditionalProduct = getProductById(val.conditionalProducts[0]);
     const targetProduct = getProductById(val.addedProducts[0]);
-    return { ...val, conditionalProduct, targetProduct };
+    const basketSpecialsID = uuidv4();
+    return { ...val, conditionalProduct, targetProduct, basketSpecialsID };
   });
   const totalDiscount = specialsProducts.reduce(
     (acc, val) => acc + val.discountApplied,
@@ -44,11 +46,16 @@ export default function ShoppingList() {
   );
   // only 1 offer can be applied to an item
   const subTotal = sumItems(allBasket);
+  const specialsTotal =
+    specialsProducts.reduce((acc, val) => {
+      const added = val.conditionalProduct?.productUnitPrice ?? 0;
+      return acc + added;
+    }, 0) - totalDiscount;
   return (
     <StyledShoppingList
       style={{ visibility: menuExposed ? "visible" : "hidden" }}
     >
-      <CloseButton onClick={setMenuHidden}>
+      <CloseButton onClick={setMenuHidden} role="close">
         <img
           src="images/close-icon.svg"
           style={{ width: "30px", height: "30px" }}
@@ -69,7 +76,12 @@ export default function ShoppingList() {
       <hr />
       <h3>Specials</h3>
       {specialsProducts.map((val) => {
-        return <ShoppingListSpecial key={val.specialID} specialDetails={val} />;
+        return (
+          <ShoppingListSpecial
+            key={val.basketSpecialsID}
+            specialDetails={val}
+          />
+        );
       })}
       <br />
       <StyledLineItem>
@@ -83,7 +95,7 @@ export default function ShoppingList() {
       <StyledLineItem>
         <span className="title ">Total</span>
         <span className="title lineTotal">
-          {totalDiscount > 0 && formatMoney(subTotal - totalDiscount)}
+          {totalDiscount > 0 && formatMoney(subTotal + specialsTotal)}
         </span>
       </StyledLineItem>
       <br />

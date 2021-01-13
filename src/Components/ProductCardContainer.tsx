@@ -35,7 +35,7 @@ function ProductCard({ productInfo }: { productInfo: Product }) {
   };
 
   return (
-    <StyledProductCard>
+    <StyledProductCard onClick={handleAddButton}>
       <StyledProductCardHeader>
         <span style={{ textTransform: "capitalize" }}>{productName}</span>
         <span></span>
@@ -45,7 +45,7 @@ function ProductCard({ productInfo }: { productInfo: Product }) {
       </StyledImageContainer>
       <StyledProductCardFooter>
         <p>{formatMoney(productUnitPrice)}</p>
-        <StyledAddButton onClick={handleAddButton}>add...</StyledAddButton>
+        <StyledAddButton>add...</StyledAddButton>
       </StyledProductCardFooter>
     </StyledProductCard>
   );
