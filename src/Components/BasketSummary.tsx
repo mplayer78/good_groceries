@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { useProductState } from "../State/ProductContext";
+import { useUIState } from "../State/UIContext";
 import formatMoney from "../util/formatMoney";
 import sumItems from "../util/sumItems";
 
 export default function BasketSummary() {
   const { allBasket } = useProductState();
+  const { setMenuExposed } = useUIState();
   const basketTotal = sumItems(allBasket);
   const basketQuantity = allBasket.length;
   return (
@@ -12,7 +14,7 @@ export default function BasketSummary() {
       {basketTotal > 0 && (
         <p data-testid="basketSummaryTotal">{formatMoney(basketTotal)}</p>
       )}
-      <StyledImageContainer>
+      <StyledImageContainer onClick={setMenuExposed}>
         <img src="/images/shopping-basket.svg" alt="shopping basket" />
       </StyledImageContainer>
       {basketTotal > 0 && (

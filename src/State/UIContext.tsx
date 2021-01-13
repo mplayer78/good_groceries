@@ -51,6 +51,6 @@ export function useUIState() {
   return {
     setMenuExposed: () => ctx.dispatch({ type: "EXPOSE_MENU" }),
     setMenuHidden: () => ctx.dispatch({ type: "HIDE_MENU" }),
-    ...ctx,
+    menuExposed: ctx.state.menuExposed,
   };
 }

@@ -90,9 +90,13 @@ function UIReducer(state: ProductStateType, action: ActionTypes) {
       }
       return state;
     case "REMOVE_PRODUCT_FROM_BASKET":
+      const idx = state.basket.findIndex(
+        (v) => v.productID === action.basketProductID
+      );
+      // TODO, handle invalid productID
       return {
         ...state,
-        // TODO handle product update
+        basket: state.basket.filter((val, ind) => ind !== idx),
       };
     case "HYDRATE_ALL_PRODUCTS":
       return {
@@ -144,5 +148,6 @@ export function useProductState() {
     allProducts: state.products,
     allBasket: state.basket,
     allOffers: state.offers,
+    state,
   };
 }
