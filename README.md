@@ -4,6 +4,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 The project was created for a job application.
 
+The Project can be seen, deployed, here:
+
+https://vigorous-ritchie-079372.netlify.app/
+
 ## Tools Used
 Create React App
 TypeScript
