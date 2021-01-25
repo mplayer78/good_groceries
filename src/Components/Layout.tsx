@@ -6,18 +6,23 @@ import HeaderBar from "./HeaderBar";
 export default function Layout({ children }: { children: ReactNode }) {
   const { hydrateProducts, hydrateOffers } = useProductState();
   const [products, setProducts] = useState([]);
+  console.log("products", products);
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
     async function getProducts() {
-      fetch("data.json", {
+      fetch("http://localhost:8010/products", {
+        method: "GET",
+        mode: "cors",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
       })
         .then((apiResponse) => apiResponse.json())
-        .then((productData) => setProducts(productData));
+        .then((productData) => setProducts(productData))
+        .catch((error) => console.log("error", error));
     }
     getProducts();
   }, []);
