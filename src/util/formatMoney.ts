@@ -1,5 +1,5 @@
 export default function formatMoney(pence: number) {
-  const penceStr = pence.toString();
+  const penceStr = pence?.toString() ?? "0";
   if (pence < 0) {
     return "Invalid";
   } else if (pence < 100) {
